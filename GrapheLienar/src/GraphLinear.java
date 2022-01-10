@@ -1,14 +1,11 @@
-public class GraphLienar {
+public class GraphLinear {
 
     protected int[][] listeAdj;
-    protected byte[][] matriceAdj;
     public int[] ensSommets;
 
 
-    public GraphLienar(int n){
+    public GraphLinear(int n){
         listeAdj = new int[n][n];
-
-        matriceAdj = new byte[n][n];
 
         ensSommets = new int[n];
         for(int i = 1; i < this.ensSommets.length; i++){
@@ -20,14 +17,6 @@ public class GraphLienar {
     public int order(){
         return this.ensSommets.length;
     }
-/*
-    public int outDegree(int x){
-
-    }
-
-    public int inDegree(int x){
-
-    }*/
 
     public int Degree(int x){
         return this.listeAdj[x-1].length;
@@ -52,7 +41,7 @@ public class GraphLienar {
     public void setAdjacencyList(int x, int[] neighborhood){
         for (int i = 0; i < neighborhood.length; i++)
         {
-            this.listeAdj[x-1][i] = neighborhood[i];
+            this.listeAdj[x][i] = neighborhood[i];
         }
     }
 
@@ -61,26 +50,8 @@ public class GraphLienar {
     }
 
     public int[] vertexSet(){
-
         return this.ensSommets;
     }
 
-    public void setAdjacencyMatrix(byte[][] matrix){
-
-        int len = matrix.length;
-        int last = 0;
-        for(int i = 0; i < len; i++){
-            for(int j = 0; j < len; j++){
-                if (matrix[i-1][j] == 1) {
-                    ensSommets[last] = j+1;
-                    last++;
-                }
-            }
-        }
-
-    }
-    public byte[][] getAdjacencyMatrix(){
-        return matriceAdj;
-    }
 
 }
