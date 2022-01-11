@@ -9,22 +9,19 @@ public class GraphLinear {
 
         ensSommets = new int[n];
         for(int i = 1; i < this.ensSommets.length; i++){
-            this.ensSommets[i] = i;
+            this.ensSommets[i-1] = i;
         }
-
+        this.ensSommets[n-1] = 0;
     }
 
     public int order(){
         return this.ensSommets.length;
     }
 
-    public int Degree(int x){
+    public int degree(int x){
         return this.listeAdj[x-1].length;
     }
 
-    public boolean isVertex(int x){
-        return x >= 1 || x <= order();
-    }
 
     public boolean isEdge(int x, int y){
         boolean res = false;
@@ -52,6 +49,5 @@ public class GraphLinear {
     public int[] vertexSet(){
         return this.ensSommets;
     }
-
 
 }

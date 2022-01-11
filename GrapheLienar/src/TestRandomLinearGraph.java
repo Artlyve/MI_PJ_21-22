@@ -41,28 +41,27 @@ public class TestRandomLinearGraph extends GraphLinear {
         int n = sc.nextInt();
 
         myGraph = new GraphLinear(n);
-
         for(int i = 0; i < n-1; i++){
             coin c = randomCoin();
-            if(c == coin.PILE){
 
-                c = randomCoin();
+            if(myGraph.ensSommets[i+1] != 0){
 
                 if(c == coin.PILE){
-                    int x = myGraph.ensSommets[i];
-                    int[] y = {myGraph.ensSommets[i+1]};
-                    System.out.println("x : " + x + " " + y[0] );
-
-                    myGraph.setAdjacencyList(x, y);
-                }else{
-                    int y = myGraph.ensSommets[i+1];
-                    int[] x = {myGraph.ensSommets[i]};
-                    System.out.println("tab x : " + x[0] + " " + y );
-                    myGraph.setAdjacencyList(y, x);
+                    c = randomCoin();
+                    if(c == coin.PILE){
+                        int x = myGraph.ensSommets[i];
+                        int[] y = {myGraph.ensSommets[i+1]};
+                        System.out.println("x : " + x + " " + y[0] );
+                        myGraph.setAdjacencyList(x, y);
+                    }else{
+                        int y = myGraph.ensSommets[i+1];
+                        int[] x = {myGraph.ensSommets[i]};
+                        System.out.println("tab x : " + x[0] + " " + y );
+                        myGraph.setAdjacencyList(y, x);
+                    }
                 }
-            }
+            }else {break;}
         }
-
     }
 
     public static void main(String...args){
@@ -76,24 +75,13 @@ public class TestRandomLinearGraph extends GraphLinear {
         }*/
 
         System.out.println();
+
+        for(int k = 0; k < g.myGraph.ensSommets.length; k++){
+            System.out.print(g.myGraph.ensSommets[k] + " ");
+        }
+        System.out.println();
         for(int k = 0; k < g.myGraph.getAdjacencyList(1).length; k++){
             System.out.print(g.myGraph.getAdjacencyList(1)[k] + " ");
-        }
-        System.out.println();
-        for(int k = 0; k < g.myGraph.getAdjacencyList(2).length; k++){
-            System.out.print(g.myGraph.getAdjacencyList(2)[k] + " ");
-        }
-        System.out.println();
-        for(int k = 0; k < g.myGraph.getAdjacencyList(3).length; k++){
-            System.out.print(g.myGraph.getAdjacencyList(3)[k] + " ");
-        }
-        System.out.println();
-        for(int k = 0; k < g.myGraph.getAdjacencyList(4).length; k++){
-            System.out.print(g.myGraph.getAdjacencyList(4)[k] + " ");
-        }
-        System.out.println();
-        for(int k = 0; k < g.myGraph.getAdjacencyList(5).length; k++){
-            System.out.print(g.myGraph.getAdjacencyList(5)[k] + " ");
         }
 
     }
