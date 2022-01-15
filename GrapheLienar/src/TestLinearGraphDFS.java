@@ -15,7 +15,7 @@ public class TestLinearGraphDFS {
     }
 
     /*** === METHODES === ***/
-    //VERIFIE SI TOUT LES SOMMETS NE SONT PAS ISOLES
+
     private boolean isRelatedComp() {
         boolean res = false;                //false : aucune composante connexe, tous les sommets sont isolés
         for (int i : this.cc) {
@@ -27,12 +27,10 @@ public class TestLinearGraphDFS {
         return res;
     }
 
-    // === ACCESSEURS ===
     public LinkedList<Sommet> getQueue() {
         return this.queue;
     }
 
-    //RENVOIE SI LE GRAPHE EST CONNEXE
     private boolean isRelated() {
 
         boolean res = isRelatedComp();     //Si tous les sommets sont d'emblée tous isolés, cela ne sert à rien de chercher (règle au préalable le pb du 0 cf. ci-dessous)
@@ -50,12 +48,8 @@ public class TestLinearGraphDFS {
         return res;
     }
 
-    // === MUTATEURS ===
-
-    //AJOUTE UN SOMMET A LA FILE, LE PASSE EN ORANGE ET LUI AJOUTE UN PARENT
     private void addQueue(Sommet newSommet, Sommet elder) {
 
-        //SSI LE SOMMET N'A PAS DEJA ETE DECOUVERT
         if (newSommet.getColor() == Sommet.color.Green) {
             this.queue.addLast(newSommet);                  //On l'ajoute à la file
             newSommet.setOrange();                          //Il passe en Orange
@@ -63,10 +57,8 @@ public class TestLinearGraphDFS {
         }
     }
 
-    //POUR RETIRER UN SOMET DE LA FILE ET LE PASSER EN ROUGE
     private void remQueue(Sommet newVertex) {
 
-        //SSI LE SOMMET A DEJA ETE DECOUVERT
         if (newVertex.getColor() == Sommet.color.Orange) {
             this.queue.removeFirst();                       //On le retire de la file
             newVertex.setRed();                             //Il passe en Rouge
@@ -74,116 +66,52 @@ public class TestLinearGraphDFS {
         }
     }
 
-    // === AFFICHAGE ===
-
-    /*private void printQueue() {
-        if (this.queue.size() != 0) {
-            System.out.print("\n\t\tF = [");
-            for (Sommet s : this.queue) {
-                System.out.print(" " + s.getValue());
-            }
-            System.out.print(" ]\n");
-        }
-    }
-
-    private void printRelatedComponent() {
-        if (this.out.size() > 1) {
-            System.out.print("\n\tRelated Component = [");
-            for (Sommet s : this.out) {
-                System.out.print(" " + s.getValue());
-            }
-            System.out.print(" ]\n");
-        }
-    }
-
-    //UN JOLI AFFICHAGE D'UN TABLEAU ASSOCIANT CHAQUE SOMMET A LA RACINE DE SA COMPOSANTE CONNEXE
-    private void printCC() {
-        System.out.print("\n\tRELATED COMPONENTS BOARD :\n\n\t  Vertexes :\t");
-        //LES SOMMETS
-        for (int i = 0; i < this.cc.length; i++) {
-            //UNIQUEMENT POUR ALIGNER LES CHIFFRES AVEC LES NOMBRES
-            if (i < 9) {
-                System.out.print("| 0" + (i + 1) + " |");               //On ajoute un '0' devant un chiffre pour éviter un décalage
-            }
-            else {
-                System.out.print("| " + (i + 1) + " |");
-            }
-        }
-        System.out.print("\n\t  Roots :\t");
-        //LES RACINES
-        for (int i = 0; i < this.cc.length; i++) {
-            //UNIQUEMENT POUR ALIGNER LES CHIFFRES AVEC LES NOMBRES
-            if (this.cc[i] < 10) {
-                System.out.print("| 0" + this.cc[i] + " |");            //On ajoute un '0' devant un chiffre pour éviter un décalage
-            }
-            else {
-                System.out.print("| " + this.cc[i] + " |");
-            }
-        }
-        System.out.print("\n\n");
-    }
-
-    private void printDistances() {
-        //SI LA LISTE NE POSSEDE PAS QU'UN UNIQUE ELEMENT
-        if (this.out.size() > 1) {
-            System.out.print("\n\t=== DISTANCES FROM THE BEGIN (" + this.out.get(0).getValue() + ") ===\n\t==\n");
-            for (int i = 1; i < this.out.size(); i++) {
-                Sommet s = this.out.get(i);
-                System.out.print("\t==\t" + s.getValue() + "\t: " + s.getDistance() + "\n");
-            }
-            System.out.print("\t==\n\t=====================================\n");
-        }
-    }*/
 
     /*** === PARCOURS EN PROFONDEUR === ***/
 
-    public void parcoursProfondeur(GraphLinear G) {
+    public void parcoursProfondeur(GraphLinearBis G) {
 
-        // === VARIABLES
         Random rand = new Random();
         int sommet = rand.nextInt(G.order() - 1 + 1) + 1;       //Un random qui attribut le début du parcours en largeur à un sommet du graphe
-        Sommet newS = G.getVertex(vertex);                          //Pointeur sur le sommet
+        Sommet newS = G.getVertex(sommet);                          //Pointeur sur le sommet
 
-        //ON NE VA PAS BÊTEMENT REFAIRE UN PARCOURS DEJA REALISE
-        while (newV.getColor() != Vertex.color.Green) {         //Tant que l'on tombe sur un sommet qui a déjà été découvert
-            vertex = rand.nextInt(G.order() - 1 + 1) + 1;       //On en prend un nouveau (pas optimisé, probabilité que cela cherche pendant longtemps)
-            newV = G.getVertex(vertex);
+
+        while (newS.getColor() != Sommet.color.Green) {         //Tant que l'on tombe sur un sommet qui a déjà été découvert
+            sommet = rand.nextInt(G.order() - 1 + 1) + 1;       //On en prend un nouveau (pas optimisé, probabilité que cela cherche pendant longtemps)
+            newS = G.getVertex(sommet);
         }
 
-        int root = vertex;
+        int root = sommet;
         this.queue = new LinkedList<>();
         this.out = new ArrayList<>();
 
-        //AFFICHAGE
-        System.out.print("\n\n   *****************\n   * => BEGIN : " + vertex + " *\n   *****************\n");
 
-        //AJOUT DU PREMIER SOMMET A LA FILE
-        this.addQueue(newV, null);                      //Le sommet est ajouté à la file, il passe en orange et il n'a pas de parents (null)
+        System.out.print("\n\n   *****************\n   * => BEGIN : " + sommet + " *\n   *****************\n");
+
+
+        this.addQueue(newS, null);
 
         // === PARCOURS
         while (this.queue.size() != 0) {
 
-            Vertex[] adj = G.getAdjencyList(vertex);    //La suite d'adjacence du sommet en question
+            Sommet[] adj = G.getAdjacencyList(sommet);
 
-            //AFFICHAGE
-            printQueue();                               //On affiche l'état de la file
 
-            //POUR CHAQUE SOMMET DE LA SUITE D'ADJACENCE
-            for (Vertex v : adj) {
-                this.addQueue(v, newV);                 //On ajoute le sommet à la liste et il passe en orange et on ajoute le parent (automatique)
+            for (Sommet v : adj) {
+                this.addQueue(v, newS);                 //On ajoute le sommet à la liste et il passe en orange et on ajoute le parent (automatique)
                 this.cc[v.getValue() - 1] = root;       //On rempli le tableau de composantes connexes
             }
 
-            this.remQueue(newV);;                       //On a travaillé sur ce sommet, on le sort de la file et le passe en rouge (automatique)
+            this.remQueue(newS);;                       //On a travaillé sur ce sommet, on le sort de la file et le passe en rouge (automatique)
 
             //NOUVEAU SOMMET
             if (this.queue.size() != 0) {
-                newV = this.queue.getFirst();           //On prend le premier sommet de la file
-                vertex = newV.getValue();               //Et on récupère sa valeur (utile à certaines fonctions)
+                newS = this.queue.getFirst();           //On prend le premier sommet de la file
+                sommet = newS.getValue();               //Et on récupère sa valeur (utile à certaines fonctions)
             }
         }
 
-        // === AFFICHAGE FINAL
+/*        // === AFFICHAGE FINAL
         System.out.print("\n\t\tF = []\n");
         printDistances();                                               //On affiche les distances
         printRelatedComponent();                                        //On affiche la composane découverte à chaque fin de parcours
@@ -192,6 +120,6 @@ public class TestLinearGraphDFS {
             System.out.print("\n\n=== END OF THE WIDTH COURSE ===\n");
             printCC();                                                  //On affiche le tableau des composantes connexes
             G.setRelated(isRelated());                          //On indique àau graphe s'il est connexe ou non
-        }
+        }*/
     }
 }

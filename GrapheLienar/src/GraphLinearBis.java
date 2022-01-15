@@ -5,13 +5,10 @@ public class GraphLinearBis {
 
 
     public GraphLinearBis(int n){
-        listeAdj = new Sommet[n][n];
+        listeAdj = new Sommet[n][];
 
         ensSommets = new Sommet[n];
-        for(int i = 1; i < this.ensSommets.length; i++){
-            this.ensSommets[i-1] = i;
-        }
-        this.ensSommets[n-1] = 0;
+
     }
 
     public int order(){
@@ -22,18 +19,6 @@ public class GraphLinearBis {
         return this.listeAdj[x-1].length;
     }
 
-
-    public boolean isEdge(int x, int y){
-        boolean res = false;
-        for(int i = 0; i < this.listeAdj[x].length; i++)
-        {
-            if(this.listeAdj[x-1][i] == y)
-            {
-                res = true;
-            }
-        }
-        return res;
-    }
 
     public void setAdjacencyList(int x, Sommet[] neighborhood){
         for (int i = 0; i < neighborhood.length; i++)
