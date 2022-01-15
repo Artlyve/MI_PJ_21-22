@@ -50,9 +50,9 @@ public class TestLinearGraphDFS {
 
     private void addQueue(Sommet newSommet, Sommet elder) {
 
-        if (newSommet.getColor() == Sommet.color.Green) {
+        if (newSommet.getColor() == Sommet.color.Orange) {
             this.queue.addLast(newSommet);                  //On l'ajoute à la file
-            newSommet.setOrange();                          //Il passe en Orange
+            newSommet.setRed();                          //Il passe en Orange
             newSommet.addElders(elder);
         }
     }
@@ -66,19 +66,58 @@ public class TestLinearGraphDFS {
         }
     }
 
+    //UN JOLI AFFICHAGE D'UN TABLEAU ASSOCIANT CHAQUE SOMMET A LA RACINE DE SA COMPOSANTE CONNEXE
+    private void printCC() {
+        System.out.print("\n\tRELATED COMPONENTS BOARD :\n\n\t  Vertexes :\t");
+        //LES SOMMETS
+        for (int i = 0; i < this.cc.length; i++) {
+            //UNIQUEMENT POUR ALIGNER LES CHIFFRES AVEC LES NOMBRES
+            if (i < 9) {
+                System.out.print("| 0" + (i + 1) + " |");               //On ajoute un '0' devant un chiffre pour éviter un décalage
+            }
+            else {
+                System.out.print("| " + (i + 1) + " |");
+            }
+        }
+        System.out.print("\n\t  Roots :\t");
+        //LES RACINES
+        for (int i = 0; i < this.cc.length; i++) {
+            //UNIQUEMENT POUR ALIGNER LES CHIFFRES AVEC LES NOMBRES
+            if (this.cc[i] < 10) {
+                System.out.print("| 0" + this.cc[i] + " |");            //On ajoute un '0' devant un chiffre pour éviter un décalage
+            }
+            else {
+                System.out.print("| " + this.cc[i] + " |");
+            }
+        }
+        System.out.print("\n\n");
+    }
+
+    private void printDistances() {
+        //SI LA LISTE NE POSSEDE PAS QU'UN UNIQUE ELEMENT
+        if (this.out.size() > 1) {
+            System.out.print("\n\t=== DISTANCES FROM THE BEGIN (" + this.out.get(0).getValue() + ") ===\n\t==\n");
+            for (int i = 1; i < this.out.size(); i++) {
+                Sommet v = this.out.get(i);
+                System.out.print("\t==\t" + v.getValue() + "\t: " + v.getDistance() + "\n");
+            }
+            System.out.print("\t==\n\t=====================================\n");
+        }
+    }
 
     /*** === PARCOURS EN PROFONDEUR === ***/
 
     public void parcoursProfondeur(GraphLinearBis G) {
 
         Random rand = new Random();
-        int sommet = rand.nextInt(G.order() - 1 + 1) + 1;       //Un random qui attribut le début du parcours en largeur à un sommet du graphe
+        int sommet = 0;       //Un random qui attribut le début du parcours en largeur à un sommet du graphe
         Sommet newS = G.getVertex(sommet);                          //Pointeur sur le sommet
 
 
-        while (newS.getColor() != Sommet.color.Green) {         //Tant que l'on tombe sur un sommet qui a déjà été découvert
-            sommet = rand.nextInt(G.order() - 1 + 1) + 1;       //On en prend un nouveau (pas optimisé, probabilité que cela cherche pendant longtemps)
+        while (newS.getColor() != Sommet.color.Green) {
             newS = G.getVertex(sommet);
+            newS.setGreen();
+            sommet++;
         }
 
         int root = sommet;
@@ -90,36 +129,35 @@ public class TestLinearGraphDFS {
 
 
         this.addQueue(newS, null);
+        newS.setOrange();
 
         // === PARCOURS
+        int count =0;
         while (this.queue.size() != 0) {
 
             Sommet[] adj = G.getAdjacencyList(sommet);
 
+            this.remQueue(newS);
+            newS.setRed();
 
             for (Sommet v : adj) {
-                this.addQueue(v, newS);                 //On ajoute le sommet à la liste et il passe en orange et on ajoute le parent (automatique)
-                this.cc[v.getValue() - 1] = root;       //On rempli le tableau de composantes connexes
+                if(v.getColor() == Sommet.color.Green){
+                    this.addQueue(v, newS);
+                    v.setOrange();
+                    this.cc[v.getValue() - 1] = root;
+                }
             }
 
-            this.remQueue(newS);;                       //On a travaillé sur ce sommet, on le sort de la file et le passe en rouge (automatique)
-
-            //NOUVEAU SOMMET
-            if (this.queue.size() != 0) {
-                newS = this.queue.getFirst();           //On prend le premier sommet de la file
-                sommet = newS.getValue();               //Et on récupère sa valeur (utile à certaines fonctions)
-            }
         }
 
-/*        // === AFFICHAGE FINAL
-        System.out.print("\n\t\tF = []\n");
+
+
+       System.out.print("\n\t\tF = []\n");
         printDistances();                                               //On affiche les distances
-        printRelatedComponent();                                        //On affiche la composane découverte à chaque fin de parcours
 
         if (!G.thereIsGreen()) {                                        //Une fois le graphe est complètement visité
-            System.out.print("\n\n=== END OF THE WIDTH COURSE ===\n");
+            System.out.print("\n\n=== END OF THE DEPTH COURSE ===\n");
             printCC();                                                  //On affiche le tableau des composantes connexes
-            G.setRelated(isRelated());                          //On indique àau graphe s'il est connexe ou non
-        }*/
+        }
     }
 }
