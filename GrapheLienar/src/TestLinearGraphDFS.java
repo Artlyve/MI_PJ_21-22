@@ -1,13 +1,12 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Random;
 
 public class TestLinearGraphDFS {
 
     /*** === ATTRIBUTS === ***/
-    private LinkedList<Sommet> queue;
-    private ArrayList<Sommet> out;      //On y stockera les sommets rouges (sortis), plus pratique que la recherche
-    private int[] cc;                   //C'est ici que l'on inscrit les composantes connexes
+    protected LinkedList<Sommet> queue;
+    protected ArrayList<Sommet> out;      //On y stockera les sommets rouges (sortis), plus pratique que la recherche
+    protected int[] cc;                   //C'est ici que l'on inscrit les composantes connexes
 
     /*** === CONSTRUCTEURS === ***/
     public TestLinearGraphDFS(int sommetNumber) {
@@ -16,7 +15,7 @@ public class TestLinearGraphDFS {
 
     /*** === METHODES === ***/
 
-    private boolean isRelatedComp() {
+    public boolean isRelatedComp() {
         boolean res = false;                //false : aucune composante connexe, tous les sommets sont isolés
         for (int i : this.cc) {
             if (i != 0) {
@@ -31,7 +30,7 @@ public class TestLinearGraphDFS {
         return this.queue;
     }
 
-    private boolean isRelated() {
+    public boolean isRelated() {
 
         boolean res = isRelatedComp();     //Si tous les sommets sont d'emblée tous isolés, cela ne sert à rien de chercher (règle au préalable le pb du 0 cf. ci-dessous)
 
@@ -48,7 +47,7 @@ public class TestLinearGraphDFS {
         return res;
     }
 
-    private void addQueue(Sommet newSommet, Sommet elder) {
+    public void addQueue(Sommet newSommet, Sommet elder) {
 
         if (newSommet.getColor() == Sommet.color.Orange) {
             this.queue.addLast(newSommet);                  //On l'ajoute à la file
@@ -57,7 +56,7 @@ public class TestLinearGraphDFS {
         }
     }
 
-    private void remQueue(Sommet newVertex) {
+    public void remQueue(Sommet newVertex) {
 
         if (newVertex.getColor() == Sommet.color.Orange) {
             this.queue.removeFirst();                       //On le retire de la file
@@ -67,7 +66,7 @@ public class TestLinearGraphDFS {
     }
 
     //UN JOLI AFFICHAGE D'UN TABLEAU ASSOCIANT CHAQUE SOMMET A LA RACINE DE SA COMPOSANTE CONNEXE
-    private void printCC() {
+    public void printCC() {
         System.out.print("\n\tRELATED COMPONENTS BOARD :\n\n\t  Vertexes :\t");
         //LES SOMMETS
         for (int i = 0; i < this.cc.length; i++) {
@@ -93,7 +92,7 @@ public class TestLinearGraphDFS {
         System.out.print("\n\n");
     }
 
-    private void printDistances() {
+    public void printDistances() {
         //SI LA LISTE NE POSSEDE PAS QU'UN UNIQUE ELEMENT
         if (this.out.size() > 1) {
             System.out.print("\n\t=== DISTANCES FROM THE BEGIN (" + this.out.get(0).getValue() + ") ===\n\t==\n");
@@ -109,8 +108,7 @@ public class TestLinearGraphDFS {
 
     public void parcoursProfondeur(GraphLinearBis G) {
 
-        Random rand = new Random();
-        int sommet = 0;       //Un random qui attribut le début du parcours en largeur à un sommet du graphe
+        int sommet = 0;                                              //Un random qui attribut le début du parcours en largeur à un sommet du graphe
         Sommet newS = G.getVertex(sommet);                          //Pointeur sur le sommet
 
 
@@ -147,12 +145,8 @@ public class TestLinearGraphDFS {
                     this.cc[v.getValue() - 1] = root;
                 }
             }
-
         }
-
-
-
-       System.out.print("\n\t\tF = []\n");
+        System.out.print("\n\t\tF = []\n");
         printDistances();                                               //On affiche les distances
 
         if (!G.thereIsGreen()) {                                        //Une fois le graphe est complètement visité

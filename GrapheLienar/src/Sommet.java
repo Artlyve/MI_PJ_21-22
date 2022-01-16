@@ -2,16 +2,16 @@ import java.util.ArrayList;
 
 public class Sommet {
 
-    /*** === CONSTANTES === ***/
+    /*** CONSTANTES ***/
     public enum color {Green, Orange, Red};
     public final static color DEFAULT_COLOR = color.Green;
 
-    /*** === ATTRIBUTS === ***/
+    /*** ATTRIBUTS ***/
     private int value;
     private color c;
     private ArrayList<Sommet> elders = new ArrayList<>();
 
-    /*** === CONSTRUCTEUR === ***/
+    /*** CONSTRUCTEUR ***/
     public Sommet(int value) {
         this.value = value;
         this.c = DEFAULT_COLOR;
@@ -27,7 +27,6 @@ public class Sommet {
         return sommets;
     }
 
-    // === ACCESSEURS ===
     public int getValue() {
         return this.value;
     }
@@ -44,7 +43,6 @@ public class Sommet {
         return this.elders.size();
     }
 
-    // === MUTATEURS ===
 
     public void setGreen() {
         this.c = DEFAULT_COLOR;
@@ -62,18 +60,17 @@ public class Sommet {
     }
 
     public void addElders(Sommet eld) {
-        //S'IL Y A UN PARENT A AJOUTER
+
         if (eld != null) {
-            //COPIE DES PARENTS DU PARENT (LES PARENTS DU PARENT SONT SES PARENTS)
+
             for (Sommet s : eld.getElders()) {
                 this.elders.add(s);
             }
-            this.elders.add(eld);           //On ajoute le parent
+            this.elders.add(eld);
         }
     }
 
-    // === AFFICHAGE ===
-
+  /********* Methode d'affichage *********/
     private String eldToString() {
         String res = "[";
         for (Sommet s : this.elders) {
@@ -83,7 +80,7 @@ public class Sommet {
         return res;
     }
 
-    //ON AFFICHE LA DISTANCE ET LA RACINE, SINON ON PRECISE QUE LE SOMMET EST UNE RACINE
+
     private String printDistance() {
         String res = " | [ROOT]";
         if (this.getDistance() != 0) {
